@@ -3,14 +3,20 @@ BoxRadius = 6
 InputSize = (BoxRadius * 2 + 1) * (BoxRadius * 2 + 1)
 Inputs = InputSize + 1
 
+client.pause()
 
+g_client = require("gameClient")
+
+
+
+
+--Input Functions
 function getPosition()
     marioScreenX = memory.readbyte(0x0086)
     screenEdgeX = memory.readbyte(0x071C)
     marioX = memory.readbyte(0x006D) * 0x100 + memory.readbyte(0x0086)
     marioY = memory.readbyte(0x03B8) + 16
 end
-
 function getSprites()
     local sprites = {}
     for slot = 0, 4 do
@@ -27,7 +33,6 @@ function getSprites()
 
     return sprites
 end
-
 function getTile(dx, dy)
     local x = marioX + dx + 8
     local y = marioY + dy - 16
@@ -63,9 +68,6 @@ function getTile(dx, dy)
         return 0
     end
 end
-
-
-
 function getInputs()
     local inputs = {}
     
@@ -99,18 +101,39 @@ function getInputs()
     return inputs
 end
 
+--Connection Functions
+function connect()
+    -- local hostnameFile, err = io.open('hostname.txt', 'w')
+	-- hostnameFile:write(forms.gettext(hostnameBox))
+	-- hostnameFile:close()
+
+	if g_client.isConnected() then
+		forms.settext(connectButton, "Connect Start")
+		g_client.close()
+	else
+		forms.settext(connectButton, "Connect Stop")
+		g_client.connect(forms.gettext(hostnameBox))
+		if g_client.isConnected() then
+			print("Connected.")
+		else
+			print("Unable to connect.")
+		end
+
+	end
+end
+
+--Forms
+form = forms.newform(195, 335, "Play")
+hostnameBox = forms.textbox(form, "LAPTOP-F79I9PRS", 100, 20, "TEXT", 60, 70)
+forms.label(form, "Hostname:", 3, 73)
+connectButton = forms.button(form, "Connect Button", connect, 3, 100)
+
+
 
 while(true) do
-    inputs = getInputs()
     console.clear()
-    
-    for y = 3, BoxRadius*2-3 do
-        console.write('\n')
-        for x=0, BoxRadius*2 do
-        
-            console.write(inputs[(y*(BoxRadius*2+1))+x +1]..' ')
+    inputs = getInputs()
+    g_client.sendList(inputs)
 
-        end
-    end
     emu.frameadvance()
 end
