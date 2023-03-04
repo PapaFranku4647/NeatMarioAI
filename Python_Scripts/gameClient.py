@@ -24,7 +24,7 @@ class game_client(object):
                 print('Exception occurred while listening for client.')
                 print(traceback.print_exc())
                 if self.clientsocket != None:
-                    self.clientsocket.send(b"close")
+                    self.clientsocket.send(b"python receive close")
                     self.clientsocket.close()
             
 
@@ -43,12 +43,10 @@ class game_client(object):
                 screen = self.receive_line()
                 #screen = [float(v) for v in screen.split(' ')]
                 return screen
-            except KeyboardInterrupt:
-                print('interrupted!')
             except:
                 print("Exception occurred. Closing connection.")
                 print(traceback.print_exc())
-                self.clientsocket.send(b"close")
+                self.clientsocket.send(b"python receive close")
                 self.clientsocket.close()
                 self.listen()
                 

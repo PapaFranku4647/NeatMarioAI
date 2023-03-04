@@ -4,7 +4,7 @@ InputSize = (BoxRadius * 2 + 1) * (BoxRadius * 2 + 1)
 Inputs = InputSize + 1
 
 client.pause()
-
+console.clear()
 g_client = require("gameClient")
 
 
@@ -111,10 +111,11 @@ function connect()
 		forms.settext(connectButton, "Connect Start")
 		g_client.close()
 	else
-		forms.settext(connectButton, "Connect Stop")
+		
 		g_client.connect(forms.gettext(hostnameBox))
 		if g_client.isConnected() then
 			print("Connected.")
+            forms.settext(connectButton, "Disconnect")
 		else
 			print("Unable to connect.")
 		end
@@ -123,17 +124,18 @@ function connect()
 end
 
 --Forms
-form = forms.newform(195, 335, "Play")
+form = forms.newform(295, 335, "Settings")
 hostnameBox = forms.textbox(form, "LAPTOP-F79I9PRS", 100, 20, "TEXT", 60, 70)
 forms.label(form, "Hostname:", 3, 73)
-connectButton = forms.button(form, "Connect Button", connect, 3, 100)
+connectButton = forms.button(form, "Connect", connect, 3, 100, 70, 20)
 
 
 
 while(true) do
-    console.clear()
     inputs = getInputs()
-    g_client.sendList(inputs)
-
+    if g_client.isConnected() then
+        g_client.sendList(inputs)
+    end
+    
     emu.frameadvance()
 end

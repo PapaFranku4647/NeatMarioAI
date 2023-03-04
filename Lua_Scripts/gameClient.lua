@@ -9,17 +9,18 @@ function gameClient.connect(host)
 	local port = 2222
 	print("Connecting to " .. host  .. ":" .. port .. "...")
 	gameClient.client = socket.connect(host, port)
+
 	if client == nil then
 		print('Error connecting to server at ' .. host .. ':' .. port .. '.')
 	end
-	
+
 	gameClient.client:settimeout(-1)
 	gameClient.client:setoption("tcp-nodelay", true)
 end
 
 function gameClient.close()
 	if gameClient.client ~= nil then
-		gameClient.client:send("close\n")
+		gameClient.client:send("lua close\n")
 		gameClient.client:close()
 	end
 	gameClient.client = nil
@@ -40,9 +41,9 @@ function gameClient.sendList(list)
 		end
 		send = send .. list[i]
 	end
-	
+
 	send = send .. "\n"
-	
+
 	gameClient.client:send(send)
 end
 
@@ -52,19 +53,19 @@ function receiveLine()
 	local err = nil
 	while data ~= "\n" do
 		data,err = gameClient.client:receive(1)
-		
+
 		if err ~= nil then
 			print("Socket Error: " .. err)
-			
+
 			gameClient.close()
 			return nil
 		end
-		
+
 		if data ~= nil and data ~= "\n" then
 			line = line .. data
 		end
 	end
-	
+
 	return line
 end
 
