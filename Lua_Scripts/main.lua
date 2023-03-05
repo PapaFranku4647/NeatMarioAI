@@ -3,12 +3,29 @@ BoxRadius = 6
 InputSize = (BoxRadius * 2 + 1) * (BoxRadius * 2 + 1)
 Inputs = InputSize + 1
 
+ButtonNames = {"A", "B", "Up", "Down", "Left", "Right"}
+controller = {}
+saveStateFile = "Level1.State" 
+
 client.pause()
-console.clear()
+
+local g_client = nil
+
 g_client = require("gameClient")
 
 
+console.clear()
 
+function initialize()
+    savestate.load(saveStateFile)
+    lastFit = 27
+    rightmost = 0
+    currentFrame = 0
+    TimeoutConstant=20
+    timeout = TimeoutConstant
+    reward = 0
+    frame_gap = 5
+end
 
 --Input Functions
 function getPosition()
@@ -101,6 +118,49 @@ function getInputs()
     return inputs
 end
 
+function getScore()
+ 
+end
+
+
+
+--Joypad Functions
+function getController()
+	local buttons = {}
+	local state = joypad.get(1)
+	
+	for b=1,#ButtonNames do
+		button = ButtonNames[b] 
+		if state[button] then
+			buttons[b] = 1
+		else
+			buttons[b] = 0
+		end
+	end	
+	
+	return buttons
+end
+
+function clearJoypad()
+    controller = {}
+    for b = 1, #ButtonNames do
+        controller["P1 " .. ButtonNames[b]] = false
+    end
+    joypad.set(controller)
+end
+
+function setController(controls)
+    controller = {}
+    for b = 1, #ButtonNames do
+        controller["P1 " .. ButtonNames[b]] = math.floor((controls[b]+0.5))==1
+    end
+    for input = 1,#controls do
+    end
+    joypad.set(controller)
+
+end
+
+
 --Connection Functions
 function connect()
     -- local hostnameFile, err = io.open('hostname.txt', 'w')
@@ -113,6 +173,7 @@ function connect()
 	else
 		
 		g_client.connect(forms.gettext(hostnameBox))
+
 		if g_client.isConnected() then
 			print("Connected.")
             forms.settext(connectButton, "Disconnect")
@@ -120,8 +181,14 @@ function connect()
 			print("Unable to connect.")
 		end
 
+        controls = g_client.receiveController()
 	end
 end
+
+
+initialize()
+clearJoypad()
+
 
 --Forms
 form = forms.newform(295, 335, "Settings")
@@ -132,10 +199,42 @@ connectButton = forms.button(form, "Connect", connect, 3, 100, 70, 20)
 
 
 while(true) do
-    inputs = getInputs()
-    if g_client.isConnected() then
-        g_client.sendList(inputs)
-    end
+    
+   
+        if(g_client.isConnected()) then
+
+            --Send
+            screen = getInputs()
+            g_client.sendList(screen)
+
+            --Receive
+            controls = g_client.receiveController()
+            
+
+            ----Do Stuff
+            --Check Death
+            
+            if marioX > rightmost then
+                rightmost = marioX
+                timeout = TimeoutConstant
+            end
+            timeout = timeout-1
+            local timeoutBonus = currentFrame / 4
+            if currentFrame%frame_gap == 0 then
+                local fitness = math.floor(rightmost - (currentFrame) / 2 - (timeout + timeoutBonus) * 2 / 3)
+                reward = fitness - lastFit
+                lastFit = fitness
+            end
+            if timeout + timeoutBonus <=0 then
+                initialize()
+            end
+            
+
+            setController(controls)
+
+        end
     
     emu.frameadvance()
+    currentFrame = currentFrame+1
+
 end

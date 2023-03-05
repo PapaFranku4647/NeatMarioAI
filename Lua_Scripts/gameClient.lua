@@ -47,26 +47,37 @@ function gameClient.sendList(list)
 	gameClient.client:send(send)
 end
 
+
+
 function receiveLine()
 	local line = ""
 	local data = nil
 	local err = nil
 	while data ~= "\n" do
 		data,err = gameClient.client:receive(1)
-
+		
 		if err ~= nil then
 			print("Socket Error: " .. err)
-
+			
 			gameClient.close()
 			return nil
 		end
-
+		
 		if data ~= nil and data ~= "\n" then
 			line = line .. data
 		end
 	end
-
+	
 	return line
+end
+
+function gameClient.receiveController()
+	local gC_Controls = {}
+	local line = receiveLine()
+	for i= 1,#line do
+		gC_Controls[i] = tonumber(line[i])
+	end
+	return gC_Controls
 end
 
 return gameClient
