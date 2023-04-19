@@ -10,5 +10,5 @@ DDQN (Double Deep Q Learning) <br />
 
 
 ## NEAT AI Playing Mario:
-https://user-images.githubusercontent.com/113576580/232959459-073e9a2b-f121-4e6c-aa7b-f58a6e8e178f.mp4
+https://user-images.githubusercontent.com/113576580/232959601-201b59be-0f75-4c31-9621-54ecd65b9e3b.mp4
 
