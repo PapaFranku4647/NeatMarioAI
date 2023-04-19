@@ -6,3 +6,9 @@ NEAT :heavy_check_mark:	<br />
 HyperNEAT <br />
 Q Learning <br />
 DDQN (Double Deep Q Learning) <br />
+
+
+
+## NEAT AI Playing Mario:
+https://user-images.githubusercontent.com/113576580/232959459-073e9a2b-f121-4e6c-aa7b-f58a6e8e178f.mp4
+
