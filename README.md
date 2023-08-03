@@ -16,6 +16,3 @@ Witness the culmination of the NEAT Algorithm's capabilities in the realm of Mar
 ![NEAT AI Playing Mario](https://user-images.githubusercontent.com/113576580/232959601-201b59be-0f75-4c31-9621-54ecd65b9e3b.mp4)
 
 To delve deeper into the NEAT algorithm's intricacies, consider perusing the [original paper](https://nn.cs.utexas.edu/downloads/papers/stanley.ec02.pdf) authored by Stanley et al.
-
----
-This enhanced readme provides a more organized and comprehensive overview of your Neat Mario AI project. It offers clarity about the project's goals, the AI algorithms involved, and highlights the remarkable achievements of the NEAT AI agent. The structure is well-defined, and key information is presented in a more reader-friendly format.
