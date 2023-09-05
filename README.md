@@ -1,6 +1,6 @@
 # Neat Mario AI
 
-The Neat Mario AI project is dedicated to the development of an intelligent agent capable of mastering the intricacies of Super Mario Bros gameplay. With the initial objective of conquering the first level, the ultimate ambition is to guide the AI towards completing the entire game.
+The Neat Mario AI project is dedicated to the development of an intelligent agent capable of mastering the intricacies of Super Mario Bros gameplay. With the initial objective of conquering the first level, the ultimate ambition is to guide the AI towards completing the entire game. Credit to Sethbling for the graphical overlay.
 
 ## Implemented and Potential AI Models
 The project explores a variety of AI algorithms to enhance gameplay proficiency, including:
